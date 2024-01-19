@@ -12,46 +12,49 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveModule {
 
     CANSparkMax driveMotor;
     CANSparkMax turningMotor;
+    
     RelativeEncoder driveCoder;
 
+    SwerveModuleState currentState;
+
     CANcoder coder;
-    CANcoderConfiguration coderConfig;
     PIDController turningPID;
 
     //TODO Criação do módulo swerve:
     public SwerveModule (int driveID, int turningID, boolean driveInverted, boolean turningInverted, int coderID, double coderOffset) {
 
-        //motores
-        driveMotor   = new CANSparkMax(coderID, MotorType.kBrushless);
-        turningMotor = new CANSparkMax(coderID, MotorType.kBrushless);
+        //motore
+        driveMotor   = new CANSparkMax(driveID, MotorType.kBrushless);
+        turningMotor = new CANSparkMax(turningID, MotorType.kBrushless);
 
         //inverção de motores
         driveMotor.setInverted(driveInverted);
         turningMotor.setInverted(turningInverted);
 
         //Modo dos motores
-        driveMotor.setIdleMode(IdleMode.kBrake);
-        turningMotor.setIdleMode(IdleMode.kBrake);
+        driveMotor.setIdleMode(IdleMode.kCoast);
+        turningMotor.setIdleMode(IdleMode.kCoast);
 
         //drive encoders e converção de fatores para reais
         driveCoder = driveMotor.getEncoder();
         driveCoder.setPositionConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4));//
-        driveCoder.setVelocityConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4)/60);//
+        driveCoder.setVelocityConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4)/60);//        
 
         //turning encoders
         coder       = new CANcoder(coderID);
-        coderConfig = new CANcoderConfiguration();
-        coderConfig.MagnetSensor.MagnetOffset = coderOffset;
-        coder.getConfigurator().apply(coderConfig);
 
         //turning PID 
         turningPID = new PIDController(0.006, 0, 0);
         turningPID.enableContinuousInput(0, 360);
+
+
+        currentState = new SwerveModuleState(5, new Rotation2d(Units.degreesToRadians(0.0)));
 
         resetCoder();
     }
@@ -78,33 +81,38 @@ public class SwerveModule {
 
     //Reseta encoders
     private void resetCoder() {
-        coder.setPosition(0);
         driveCoder.setPosition(0);
+        //coder.setPosition(0, 1);
       }
 
     //Obtém estado do módulo
     public SwerveModuleState getState() {
-        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
+        return currentState;
     }
 
     //Obtém a posição do módulo
     public SwerveModulePosition getSwerveModulePosition(){
-        return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getTurningPosition()));
+        return new SwerveModulePosition(getDrivePosition(), new Rotation2d(Units.degreesToRadians(getTurningPosition())));
     }
 
     //Define o estado desejado do módulo
     public void setDesiredState(SwerveModuleState state) {
-        if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+        if (Math.abs(state.speedMetersPerSecond) < 0.01) {
             stop();
             return;
         }
-        state = SwerveModuleState.optimize(state, getState().angle);
-        driveMotor.set(state.speedMetersPerSecond);
-        turningMotor.set(turningPID.calculate(getTurningPosition(), state.angle.getDegrees() + 180));
+        currentState = SwerveModuleState.optimize(state, currentState.angle);
+        driveMotor.set(currentState.speedMetersPerSecond);
+        turningMotor.set(turningPID.calculate(getTurningPosition(), currentState.angle.getDegrees() + 180));
+
+        SmartDashboard.putNumber("turningPID", turningPID.calculate(getTurningPosition(), currentState.angle.getDegrees() + 180));
+        SmartDashboard.putNumber("state.speedMetersPerSecond", currentState.speedMetersPerSecond);
+        SmartDashboard.putNumber("state.angle.", currentState.angle.getDegrees() + 180);
+
     }
 
     //Para módulo
-    public void stop(){
+    public void stop() {
         driveMotor.set(0);
         turningMotor.set(0);
     }

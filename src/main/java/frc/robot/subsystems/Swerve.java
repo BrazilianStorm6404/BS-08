@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveConstants;
 
@@ -54,7 +55,7 @@ public class Swerve extends SubsystemBase {
 
   //Obtém a angulação da quadra 
   public Rotation2d getRotation2d() {
-    return Rotation2d.fromDegrees(getHeading());
+    return Rotation2d.fromDegrees(-getHeading());
   }
 
   //Obtém a posição do robô em um plano 2D 
@@ -78,15 +79,24 @@ public class Swerve extends SubsystemBase {
   //Define cada estado de módulo
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, 5);
-    frontLeft.setDesiredState(desiredStates[0]);
-    frontRight.setDesiredState(desiredStates[1]);
-    backLeft.setDesiredState(desiredStates[2]);
-    backRight.setDesiredState(desiredStates[3]);
+    frontRight.setDesiredState(desiredStates[0]);
+    frontLeft.setDesiredState(desiredStates[1]);
+    backRight.setDesiredState(desiredStates[2]);
+    backLeft.setDesiredState(desiredStates[3]);
   }
 
   @Override
   public void periodic() {
     //Atualiza odometria
     odometer.update(getRotation2d(), modulePositions);
+
+    SmartDashboard.putNumber("frontLeft", frontLeft.getTurningPosition()/360.);
+    SmartDashboard.putNumber("frontRight", frontRight.getTurningPosition()/360.);
+    SmartDashboard.putNumber("backLeft", backLeft.getTurningPosition()/360.);
+    SmartDashboard.putNumber("backRight", backRight.getTurningPosition()/360.);
+
+    SmartDashboard.putNumber("Heading", -getHeading());
+    SmartDashboard.putNumber("Gyro", -navx.getAngle());
+
   }
 }

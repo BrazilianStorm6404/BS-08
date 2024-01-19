@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.Swerve;
@@ -54,12 +55,12 @@ public class SwerveJoystickCmd extends Command {
     //Impõe valor mínimo para a execução
     xSpeed       = Math.abs(xSpeed)       > 0.05 ? xSpeed : 0.0;
     ySpeed       = Math.abs(ySpeed)       > 0.05 ? ySpeed : 0.0;
-    turningSpeed = Math.abs(turningSpeed) > 0.05 ? turningSpeed : 0.0;
+    turningSpeed = Math.abs(turningSpeed) > 0.05 ? turningSpeed : 0.0;  
 
     //Torna a direção mais suave
-    xSpeed       = xLimiter.calculate(xSpeed) * 5/4;
-    ySpeed       = yLimiter.calculate(ySpeed) * 5/4;
-    turningSpeed = turningLimiter.calculate(turningSpeed) * ((4 * Math.PI)/4);
+    xSpeed       = xLimiter.calculate(xSpeed);
+    ySpeed       = yLimiter.calculate(ySpeed);
+    turningSpeed = turningLimiter.calculate(turningSpeed);//*/
 
     //Criação da velocidade do chassi desejada
     ChassisSpeeds chassisSpeeds;
@@ -78,6 +79,7 @@ public class SwerveJoystickCmd extends Command {
 
     //Seta cada estado para suas rodas
     sb_swerve.setModuleStates(moduleStates);
+
 
   }
 

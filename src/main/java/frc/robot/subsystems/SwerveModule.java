@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -20,8 +19,10 @@ public class SwerveModule {
     CANSparkMax turningMotor;
     
     RelativeEncoder driveCoder;
+    RelativeEncoder turningCoder;
 
     SwerveModuleState currentState;
+    
 
     CANcoder coder;
     PIDController turningPID;
@@ -44,17 +45,22 @@ public class SwerveModule {
         //drive encoders e converção de fatores para reais
         driveCoder = driveMotor.getEncoder();
         driveCoder.setPositionConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4));//
-        driveCoder.setVelocityConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4)/60);//        
+        driveCoder.setVelocityConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4)/60);//
+        
+        turningCoder = turningMotor.getEncoder();
+        turningCoder.setPositionConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4));//
+        turningCoder.setVelocityConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4)/60);//
 
         //turning encoders
-        coder       = new CANcoder(coderID);
+        coder = new CANcoder(coderID);
+
 
         //turning PID 
         turningPID = new PIDController(0.006, 0, 0);
         turningPID.enableContinuousInput(0, 360);
 
 
-        currentState = new SwerveModuleState(5, new Rotation2d(Units.degreesToRadians(0.0)));
+        currentState = new SwerveModuleState(5, new Rotation2d(Units.degreesToRadians(coder.getAbsolutePosition().getValue())));
 
         resetCoder();
     }
@@ -82,9 +88,7 @@ public class SwerveModule {
     //Reseta encoders
     private void resetCoder() {
         driveCoder.setPosition(0);
-        //coder.setPosition(0, 1);
       }
-
     //Obtém estado do módulo
     public SwerveModuleState getState() {
         return currentState;

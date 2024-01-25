@@ -27,14 +27,14 @@ public class RobotContainer {
 
   private void configureBindings() {
     sb_swerve.setDefaultCommand(new RunCommand(() -> {
-      //REseta Giroscópio
+      //Reseta Giroscópio
       if(pilot.getBButton()) sb_swerve.zeroHeading();
     }, sb_swerve));
 
     sb_swerve.setDefaultCommand(new SwerveJoystickCmd(
                 sb_swerve,
-                () -> -pilot.getLeftY() * 0.5,
-                () -> -pilot.getLeftX() * 0.5,
+                () -> pilot.getLeftY() * 0.5,
+                () -> pilot.getLeftX() * 0.5,
                 () -> -pilot.getRightX()* 0.5,
                 () -> !pilot.getAButton()));
   }

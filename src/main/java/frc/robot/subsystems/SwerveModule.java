@@ -17,12 +17,11 @@ public class SwerveModule {
 
     CANSparkMax driveMotor;
     CANSparkMax turningMotor;
-    
+
     RelativeEncoder driveCoder;
     RelativeEncoder turningCoder;
 
     SwerveModuleState currentState;
-    
 
     CANcoder coder;
     PIDController turningPID;
@@ -88,7 +87,7 @@ public class SwerveModule {
     //Reseta encoders
     private void resetCoder() {
         driveCoder.setPosition(0);
-      }
+        }
     //Obtém estado do módulo
     public SwerveModuleState getState() {
         return currentState;
@@ -112,7 +111,6 @@ public class SwerveModule {
         SmartDashboard.putNumber("turningPID", turningPID.calculate(getTurningPosition(), currentState.angle.getDegrees() + 180));
         SmartDashboard.putNumber("state.speedMetersPerSecond", currentState.speedMetersPerSecond);
         SmartDashboard.putNumber("state.angle.", currentState.angle.getDegrees() + 180);
-
     }
 
     //Para módulo

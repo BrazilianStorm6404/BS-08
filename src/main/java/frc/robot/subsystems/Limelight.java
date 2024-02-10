@@ -27,7 +27,7 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getTrack() {
-    return x * 0.025;
+    return x * 0.01;
   }
 
   public Boolean tagSpeaker () {

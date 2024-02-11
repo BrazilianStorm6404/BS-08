@@ -22,30 +22,34 @@ public class Climber extends SubsystemBase {
   boolean lastIsUp = false, initTime = false;
   Timer time = new Timer();
 
+  double timeSol = 0.3;
+
   public Climber() {
     climber.setInverted(true);
   }
   public void setClimber(double vel) {
 
-    //if(coder.get() <= 0 && vel < 0)         vel = 0;
-    //else if (coder.get() > 1000 && vel > 0) vel = 0;
-/* 
-    if (vel < 0) solenoid.set(1);
+    if (vel > 0) solenoid.set(1);
     else         solenoid.set(0);
     
-    if (!lastIsUp && vel > 0) {
+    if (!lastIsUp && vel <= 0) {
       time.reset();
       time.start();
     }
 
-    if (time.get() >= 0.5) initTime = true;
+    //if (time.get() >= timeSol) initTime = true;
 
-    if (time.get() < 0.5 && initTime) climber.set(-0.5);
-    else                              climber.set(vel);
+    if(coder.get() <= 0 && vel < 0)         vel = 0;
+    else if (coder.get() > 6000 && vel > 0) vel = 0;
 
+    if (vel > 0 && time.get() < timeSol) climber.set(-0.3);
+    else climber.set(vel);
+    
     lastIsUp = vel > 0;
-*/
-    climber.set(vel);
+
+    //climber.set(vel);
+    SmartDashboard.putNumber("climber Coder", coder.get());
+
 
   }
 

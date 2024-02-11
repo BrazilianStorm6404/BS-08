@@ -61,11 +61,12 @@ public class RobotContainer {
         sb_climber.setClimber(0);
       }
 
-      if (copilot.getBButton()) {
+      /*if (copilot.getBButton()) {
         sb_climber.setSol(1);
       } else {
         sb_climber.setSol(0);
       }
+      */
       
     }, sb_climber));
     

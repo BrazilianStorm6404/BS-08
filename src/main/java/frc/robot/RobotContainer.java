@@ -27,7 +27,7 @@ public class RobotContainer {
   Vision    sb_vision   = new Vision();
   Climber   sb_climber  = new Climber();
 
-  double trackCorrection;
+  double trackCorrectionX, trackCorrectionY;
 
   public RobotContainer() {
     
@@ -38,10 +38,12 @@ public class RobotContainer {
  
     sb_shooter.setDefaultCommand(new RunCommand(() -> {
       
-      trackCorrection = 0;
+      trackCorrectionX  = 0;
+      trackCorrectionY = 0;
 
       if (copilot.getLeftTriggerAxis() != 0){
-        trackCorrection = sb_ll.getTrack();
+        trackCorrectionX = sb_ll.getTrackX();
+        trackCorrectionY = sb_ll.getTrackY();
         sb_shooter.setShooter(copilot.getLeftTriggerAxis());
       } else if (pilot.getLeftBumper()) {
         sb_shooter.setShooter(-0.6);
@@ -99,14 +101,14 @@ public class RobotContainer {
     }, sb_swerve));
 
     sb_swerve.setDefaultCommand(new SwerveJoystickCmd(
-                sb_swerve,
-                () -> pilot.getLeftY()                     * (pilot.getRightBumper() ? 0.5 : 1),
-                () -> pilot.getLeftX()                      * (pilot.getRightBumper() ? 0.5 : 1),
-                () -> (pilot.getRightX() + trackCorrection) * (pilot.getRightBumper() ? 0.5 : 1),
-                () -> pilot.getAButton()));
+      sb_swerve,
+      () -> (pilot.getLeftY()  - trackCorrectionY) * (pilot.getRightBumper() ? 0.5 : 1),
+      () ->  pilot.getLeftX()                      * (pilot.getRightBumper() ? 0.5 : 1),
+      () -> (pilot.getRightX() + trackCorrectionX) * (pilot.getRightBumper() ? 0.5 : 1),
+      () ->  pilot.getAButton()));
    }
   
   public Command getAutonomousCommand() {
-    return null; //new TestAuto(sb_swerve);
+    return new TestAuto(sb_swerve, sb_shooter, sb_conveyor);
   }
 }

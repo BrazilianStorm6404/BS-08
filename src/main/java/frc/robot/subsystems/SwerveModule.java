@@ -43,12 +43,12 @@ public class SwerveModule {
 
         //drive encoders e converção de fatores para reais
         driveCoder = driveMotor.getEncoder();
-        driveCoder.setPositionConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4));//
-        driveCoder.setVelocityConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4)/60);//
+        //driveCoder.setPositionConversionFactor(((1/6.12) * Math.PI * Units.inchesToMeters(4)) / 1000);//
+        //driveCoder.setVelocityConversionFactor((((1/6.12) * Math.PI * Units.inchesToMeters(4))/1000)/60);//
         
         turningCoder = turningMotor.getEncoder();
-        turningCoder.setPositionConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4));//
-        turningCoder.setVelocityConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4)/60);//
+        //turningCoder.setPositionConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4));
+        //turningCoder.setVelocityConversionFactor((1/6.12) * Math.PI * Units.inchesToMeters(4)/60);
 
         //turning encoders
         coder = new CANcoder(coderID);

@@ -15,11 +15,19 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.SwerveAutoConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
 public class TestAuto extends SequentialCommandGroup {
 
-    public TestAuto(Swerve sb_swerve) {
+    Shooter sb_shooter;
+    Conveyor sb_conveyor;
+
+    public TestAuto(Swerve sb_swerve, Shooter shooter, Conveyor conveyor) {
+
+        sb_shooter = shooter;
+        sb_conveyor = conveyor;
 
         // Configuração da trajetória com uma velocidade máxima de 3 unidades/s e uma aceleração máxima de 3 unidades/s^2
         TrajectoryConfig config = new TrajectoryConfig(2, 1)
@@ -28,20 +36,20 @@ public class TestAuto extends SequentialCommandGroup {
         // Geração de uma trajetória de teste
         Trajectory trajectoryFwd = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
-                List.of(new Translation2d(.5,0)),
-            new Pose2d(1, 0, new Rotation2d(Math.toRadians(-45))),
+                List.of(new Translation2d(.05,0)),
+            new Pose2d(0.1, 0, new Rotation2d(Math.toRadians(0))),
             config
         );
 
         // Geração de uma trajetória de teste
         Trajectory trajectoryBack = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(1, 0, new Rotation2d(Math.toRadians(-45))),
-                List.of(new Translation2d(.5,0)),
+            new Pose2d(0.1, 0, new Rotation2d(Math.toRadians(0))),
+                List.of(new Translation2d(.05,0)),
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
             config.setReversed(true)
         );
 
-        Trajectory trajectoryFinal = trajectoryFwd.concatenate(trajectoryBack);
+        Trajectory trajectoryFinal = trajectoryBack.concatenate(trajectoryFwd);
         
         // Configuração de um controlador PID para o ângulo theta
         var thetaController = new ProfiledPIDController(0.5,0,0,SwerveAutoConstants.kThetaControllerConstraints);
@@ -64,6 +72,7 @@ public class TestAuto extends SequentialCommandGroup {
 
         // Sequência de comandos
         addCommands(
+            new ShooterCmd(sb_shooter, sb_conveyor),
             new InstantCommand(() -> sb_swerve.resetOdometry(trajectoryFinal.getInitialPose())),  
             finalControllerCommand,
             new InstantCommand(() -> sb_swerve.stopModules())

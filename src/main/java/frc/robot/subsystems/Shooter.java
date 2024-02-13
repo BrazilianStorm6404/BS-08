@@ -23,12 +23,16 @@ public class Shooter extends SubsystemBase {
     time = new Timer();
   }
 
+  public Shooter(){
+        time = new Timer();
+  }
+
   public void setShooter(double vel) {
     
-    frontShoot.set(vel /* 0.4*/);
-    backShoot.set(vel *0.8);
+    frontShoot.set(vel);
+    backShoot.set(vel * 0.8);
 
-    if(vel!=0 && (limelight.getX() < Math.abs(10)) && limelight.tagSpeaker()) {
+    if(vel!=0 && (Math.abs(limelight.getX()) < 4) && (Math.abs(limelight.getY()) < 1) && limelight.tagSpeaker()) {
       limelight.setMode(2);
     } else {
       limelight.setMode(1);

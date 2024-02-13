@@ -20,6 +20,10 @@ public class Conveyor extends SubsystemBase {
     time = new Timer();
   }
 
+  public Conveyor() {
+      time = new Timer();
+  }
+
   public void setConveyor(double vel) { 
       /*if(sensor.get() && (intake.getIntake() != 0)){
         conveyor.set(0);

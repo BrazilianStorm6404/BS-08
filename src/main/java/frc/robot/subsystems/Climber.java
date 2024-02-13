@@ -37,10 +37,8 @@ public class Climber extends SubsystemBase {
       time.start();
     }
 
-    //if (time.get() >= timeSol) initTime = true;
-
-    if(coder.get() <= 0 && vel < 0)         vel = 0;
-    else if (coder.get() > 6000 && vel > 0) vel = 0;
+    //if(coder.get() <= 0 && vel < 0)         vel = 0;
+    //else if (coder.get() > 6000 && vel > 0) vel = 0;
 
     if (vel > 0 && time.get() < timeSol) climber.set(-0.3);
     else climber.set(vel);

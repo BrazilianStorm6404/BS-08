@@ -31,7 +31,7 @@ public class Swerve extends SubsystemBase {
   AHRS navx = new AHRS(SPI.Port.kMXP);
   //Odometria
   SwerveDriveOdometry odometer = new SwerveDriveOdometry(SwerveConstants.kinematics, new Rotation2d(0), modulePositions);
-  
+  double gyroOffset = 0;
   //Pausa para estabilização do sistema e resetar o giroscópio adequadamente
   public Swerve() {
     new Thread(() -> {
@@ -43,6 +43,10 @@ public class Swerve extends SubsystemBase {
   }).start();
   }
 
+  public void setGyroOffset (double offset) {
+    gyroOffset = offset;
+  }
+
   //Reseta Giroscópio
   public void zeroHeading(){
     navx.reset();
@@ -50,7 +54,7 @@ public class Swerve extends SubsystemBase {
 
   //Obtém a posição do giroscópio em relação a quadra
   public double getHeading(){
-    return Math.IEEEremainder(navx.getAngle(), 360.0);
+    return Math.IEEEremainder((navx.getAngle() + gyroOffset) % 360, 360.0);
   }
 
   //Obtém a angulação da quadra 
@@ -97,6 +101,9 @@ public class Swerve extends SubsystemBase {
 
     SmartDashboard.putNumber("Heading", -getHeading());
     SmartDashboard.putNumber("Gyro", -navx.getAngle());
+
+    SmartDashboard.putNumber("frontLeft drive", frontLeft.getDrivePosition());
+
 
   }
 }

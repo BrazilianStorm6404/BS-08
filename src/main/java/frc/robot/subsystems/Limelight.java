@@ -26,8 +26,16 @@ public class Limelight extends SubsystemBase {
     return x;
   }
 
-  public double getTrack() {
-    return x * 0.01;
+  public double getTrackX() {
+    return x * 0.02;
+  }
+
+  public double getY () {
+    return y;
+  }
+
+  public double getTrackY() {
+    return y * 0.02;
   }
 
   public Boolean tagSpeaker () {
@@ -41,15 +49,16 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
-    x    = tx.getDouble(0.0) + 0.;
-    y    = ty.getDouble(0.0);
+    x    = tx.getDouble(0.0);
+    y    = ty.getDouble(0.0) + 8.0;
     area = ta.getDouble(0.0);
     id   = tid.getDouble(0.0);
     
     //post to smart dashboard periodically
-    SmartDashboard.putNumber("getTrack", getTrack());
+    SmartDashboard.putNumber("getTrack", getTrackX());
+    SmartDashboard.putNumber("getTrack", getTrackY());
     SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", y);
+    SmartDashboard.putNumber("LimelightY", Math.abs(getY()));
     SmartDashboard.putNumber("LimelightArea", area);
     SmartDashboard.putNumber("LimelightID", id);
 

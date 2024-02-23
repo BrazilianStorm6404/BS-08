@@ -20,13 +20,13 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
-public class TestAuto extends SequentialCommandGroup {
+public class AutoSecondCenter extends SequentialCommandGroup {
 
     Shooter  sb_shooter;
     Conveyor sb_conveyor;
     Intake   sb_intake;
 
-    public TestAuto(Swerve sb_swerve, Shooter shooter, Conveyor conveyor, Intake intake) {
+    public AutoSecondCenter (Swerve sb_swerve, Shooter shooter, Conveyor conveyor, Intake intake) {
 
         sb_shooter  = shooter;
         sb_conveyor = conveyor;
@@ -36,25 +36,39 @@ public class TestAuto extends SequentialCommandGroup {
         TrajectoryConfig config = new TrajectoryConfig(2, 1)
                                       .setKinematics(SwerveConstants.kinematics);
 
-        // Geração de uma trajetória de teste
-        Trajectory trajectoryFwd = TrajectoryGenerator.generateTrajectory(
+        Trajectory trajectoryFwd1 = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
                 List.of(new Translation2d(.05,0)),
             new Pose2d(0.1, 0, new Rotation2d(Math.toRadians(0))),
             config
         );
 
-        // Geração de uma trajetória de teste
-        Trajectory trajectoryBack = TrajectoryGenerator.generateTrajectory(
+        Trajectory trajectoryBack1 = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0.1, 0, new Rotation2d(Math.toRadians(0))),
                 List.of(new Translation2d(.05,0)),
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
             config.setReversed(true)
         );
 
-        Trajectory trajectoryFinal = trajectoryBack.concatenate(trajectoryFwd);
-        
-        // Configuração de um controlador PID (pid soma com o interno)
+        Trajectory FirstTrajectory  = trajectoryBack1.concatenate(trajectoryFwd1);
+
+        Trajectory trajectoryFwd2 = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
+                List.of(new Translation2d(.05,.1), new Translation2d(.1, 0)),
+            new Pose2d(.1, .1, new Rotation2d(Math.toRadians(0))),
+            config
+        );
+
+        Trajectory trajectoryBack2 = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0.1, 0.1, new Rotation2d(Math.toRadians(0))),
+                List.of(new Translation2d(.05,.1), new Translation2d(0, 0) ),
+            new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
+            config.setReversed(true)
+        );
+
+        Trajectory SecondTrajectory = trajectoryBack2.concatenate(trajectoryFwd2);
+
+        // Configuração de um controlador PID (soma com o interno)
         var thetaController = new ProfiledPIDController(0.5,0,0,SwerveAutoConstants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -62,8 +76,20 @@ public class TestAuto extends SequentialCommandGroup {
         PIDController yPID = new PIDController(0.001, 0, 0);    
 
         // Criação de um comando de controle Swerve usando a trajetória gerada
-        SwerveControllerCommand finalControllerCommand = new SwerveControllerCommand(
-                trajectoryFinal,                        
+        SwerveControllerCommand firstControllerCommand = new SwerveControllerCommand(
+                FirstTrajectory,                        
+                sb_swerve::getPose,                    
+                SwerveConstants.kinematics,              
+                xPID,                                  
+                yPID,                                  
+                thetaController,                       
+                sb_swerve::setModuleStates,            
+                sb_swerve                              
+        );
+
+        // Criação de um comando de controle Swerve usando a trajetória gerada
+        SwerveControllerCommand secondControllerCommand = new SwerveControllerCommand(
+                SecondTrajectory,                        
                 sb_swerve::getPose,                    
                 SwerveConstants.kinematics,              
                 xPID,                                  
@@ -77,8 +103,14 @@ public class TestAuto extends SequentialCommandGroup {
         addCommands(
         new ShooterCmd(sb_shooter, sb_conveyor),
         new IntakeCmd(intake, conveyor, true),
-        new InstantCommand(() -> sb_swerve.resetOdometry(trajectoryFinal.getInitialPose())),  
-        finalControllerCommand,
+        new InstantCommand(() -> sb_swerve.resetOdometry(FirstTrajectory.getInitialPose())),  
+        firstControllerCommand,
+        new InstantCommand(() -> sb_swerve.stopModules()),
+        new IntakeCmd(intake, conveyor, false),
+        new ShooterCmd(sb_shooter, sb_conveyor),
+        new IntakeCmd(intake, conveyor, true),
+        new InstantCommand(() -> sb_swerve.resetOdometry(SecondTrajectory.getInitialPose())),  
+        secondControllerCommand,
         new InstantCommand(() -> sb_swerve.stopModules()),
         new IntakeCmd(intake, conveyor, false),
         new ShooterCmd(sb_shooter, sb_conveyor)

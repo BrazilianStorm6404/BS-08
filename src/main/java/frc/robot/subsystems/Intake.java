@@ -1,25 +1,22 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
 
-  CANSparkMax  frontIntake = new CANSparkMax(IntakeConstants.id_FrontWheel, MotorType.kBrushless);
-  WPI_TalonSRX backIntake = new WPI_TalonSRX(IntakeConstants.id_BackWheel);
+  //Criação do controlador do Intake
+  WPI_TalonSRX  backIntake  = new WPI_TalonSRX(IntakeConstants.id_BackWheel);
+  WPI_VictorSPX frontIntake = new WPI_VictorSPX(IntakeConstants.id_FrontWheel);
 
   public Intake() {}
 
-  public void setIntake (double vel) {
-    frontIntake.set(-vel);
-    backIntake.set(vel);
-  }
-
-  public double getIntake(){
-    return frontIntake.get();
+  //Função de setagem da velocidade do Intake
+  public void setIntake(double vel) {
+    frontIntake.set(vel);
+    backIntake.set(-vel);
   }
 
   @Override

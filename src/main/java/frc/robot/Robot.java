@@ -23,7 +23,9 @@ public class Robot extends TimedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    
+  }
 
   @Override
   public void autonomousInit() {
@@ -42,6 +44,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    //Obtendo configureBindings dentro da inicialização do teleoperado para não interferência com o autônomo
+    m_robotContainer.configureBindings();
   }
 
   @Override

@@ -20,13 +20,13 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
-public class TestAuto extends SequentialCommandGroup {
+public class AutoFirstCenter extends SequentialCommandGroup {
 
     Shooter  sb_shooter;
     Conveyor sb_conveyor;
     Intake   sb_intake;
 
-    public TestAuto(Swerve sb_swerve, Shooter shooter, Conveyor conveyor, Intake intake) {
+    public AutoFirstCenter(Swerve sb_swerve, Shooter shooter, Conveyor conveyor, Intake intake) {
 
         sb_shooter  = shooter;
         sb_conveyor = conveyor;
@@ -63,25 +63,25 @@ public class TestAuto extends SequentialCommandGroup {
 
         // Criação de um comando de controle Swerve usando a trajetória gerada
         SwerveControllerCommand finalControllerCommand = new SwerveControllerCommand(
-                trajectoryFinal,                        
-                sb_swerve::getPose,                    
-                SwerveConstants.kinematics,              
-                xPID,                                  
-                yPID,                                  
-                thetaController,                       
-                sb_swerve::setModuleStates,            
-                sb_swerve                              
+            trajectoryFinal,                        
+            sb_swerve::getPose,                    
+            SwerveConstants.kinematics,              
+            xPID,                                  
+            yPID,                                  
+            thetaController,                       
+            sb_swerve::setModuleStates,            
+            sb_swerve                              
         );
 
         // Sequência de comandos
         addCommands(
-        new ShooterCmd(sb_shooter, sb_conveyor),
-        new IntakeCmd(intake, conveyor, true),
-        new InstantCommand(() -> sb_swerve.resetOdometry(trajectoryFinal.getInitialPose())),  
-        finalControllerCommand,
-        new InstantCommand(() -> sb_swerve.stopModules()),
-        new IntakeCmd(intake, conveyor, false),
-        new ShooterCmd(sb_shooter, sb_conveyor)
+            new ShooterCmd(sb_shooter, sb_conveyor),
+            new IntakeCmd(intake, conveyor, true),
+            new InstantCommand(() -> sb_swerve.resetOdometry(trajectoryFinal.getInitialPose())),  
+            finalControllerCommand,
+            new InstantCommand(() -> sb_swerve.stopModules()),
+            new IntakeCmd(intake, conveyor, false),
+            new ShooterCmd(sb_shooter, sb_conveyor)
         );
     }
 }

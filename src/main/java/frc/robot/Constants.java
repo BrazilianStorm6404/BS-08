@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -39,14 +35,13 @@ public final class Constants {
 
   // Intake IDs
   public static class IntakeConstants {
-    public static final int id_FrontWheel = 14;
+    public static final int id_FrontWheel = 19;
     public static final int id_BackWheel  = 13;
   }
 
   // Conveyor IDs
     public static class ConveyorConstants {
     public static final int id_Conveyor = 17;
-    public static final int id_Sensor   = 0;
   }
   
   // Shooter IDs
@@ -58,8 +53,5 @@ public final class Constants {
   // Climber IDs
     public static class ClimberConstants {
     public static final int id_Climber    = 18;
-    public static final int id_Sol        = 19;
-    public static final int id1_BoreCoder = 1;
-    public static final int id2_BoreCoder = 2;
   }
 }

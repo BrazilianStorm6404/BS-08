@@ -13,11 +13,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveConstants;
 
+//TODO Definição dos módulos swerve e criação da odometria:
+
 public class Swerve extends SubsystemBase {
 
-  //TODO Definição dos módulos swerve e criação da odometria:
-
-  //Define os módulos
+  //Definição sos módulos
   SwerveModule frontLeft  = new SwerveModule(1, 2, false, true, 9, 0);
   SwerveModule frontRight = new SwerveModule(3, 4, false, true, 10, 0);
   SwerveModule backLeft   = new SwerveModule(5, 6, false, true, 11, 0);
@@ -27,11 +27,15 @@ public class Swerve extends SubsystemBase {
   SwerveModulePosition[] modulePositions = {frontLeft.getSwerveModulePosition(), frontRight.getSwerveModulePosition(), 
                                             backLeft.getSwerveModulePosition(), backRight.getSwerveModulePosition()};
 
-  //Giroscópio                                          
+  //Criação do Giroscópio                                          
   AHRS navx = new AHRS(SPI.Port.kMXP);
-  //Odometria
+
+  //Criaçaõ da Odometria
   SwerveDriveOdometry odometer = new SwerveDriveOdometry(SwerveConstants.kinematics, new Rotation2d(0), modulePositions);
+
+  //Offset da posição inicial do robô
   double gyroOffset = 0;
+
   //Pausa para estabilização do sistema e resetar o giroscópio adequadamente
   public Swerve() {
     new Thread(() -> {
@@ -43,11 +47,12 @@ public class Swerve extends SubsystemBase {
   }).start();
   }
 
+  //Função de offset da posiçaõ inicial
   public void setGyroOffset (double offset) {
     gyroOffset = offset;
   }
 
-  //Reseta Giroscópio
+  //Função de resetagem do Giroscópio
   public void zeroHeading(){
     navx.reset();
   }
@@ -67,12 +72,12 @@ public class Swerve extends SubsystemBase {
     return odometer.getPoseMeters();
   }
 
-  //Reseta odometria
+  //FunçãO de resetagem da odometria
   public void resetOdometry(Pose2d pose) {
     odometer.resetPosition(getRotation2d(), modulePositions, pose);
   }
 
-  //Para módulos
+  //Funçaõ para parar módulos
   public void stopModules() {
     frontLeft.stop();
     frontRight.stop();
@@ -80,7 +85,7 @@ public class Swerve extends SubsystemBase {
     backRight.stop();
   }
 
-  //Define cada estado de módulo
+  //Funçaõ de definição de cada estado de módulo
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, 5);
     frontRight.setDesiredState(desiredStates[0]);
@@ -91,6 +96,7 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
+
     //Atualiza odometria
     odometer.update(getRotation2d(), modulePositions);
 

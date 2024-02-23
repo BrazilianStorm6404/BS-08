@@ -20,13 +20,13 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
-public class TestAuto extends SequentialCommandGroup {
+public class AutoBlueLeftAndRedRight extends SequentialCommandGroup {
 
     Shooter  sb_shooter;
     Conveyor sb_conveyor;
     Intake   sb_intake;
 
-    public TestAuto(Swerve sb_swerve, Shooter shooter, Conveyor conveyor, Intake intake) {
+    public AutoBlueLeftAndRedRight(Swerve sb_swerve, Shooter shooter, Conveyor conveyor, Intake intake) {
 
         sb_shooter  = shooter;
         sb_conveyor = conveyor;

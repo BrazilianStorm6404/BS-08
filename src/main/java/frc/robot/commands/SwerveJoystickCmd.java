@@ -18,18 +18,21 @@ public class SwerveJoystickCmd extends Command {
   //Eixos do controle
   Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
   //Quadra
-  Supplier<Boolean> fieldOrientedFunction;
+  Supplier<Boolean> fieldOrientedFunction, resetGyro;
   //Suaviza transições rápidas
   SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
+  Boolean resetBlock = false;
+
   public SwerveJoystickCmd(Swerve sb_swerve, Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, 
-  Supplier<Double> turningSpdFunction, Supplier<Boolean> fieldOrientedFunction) {
+  Supplier<Double> turningSpdFunction, Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> resetGyro) {
 
     this.sb_swerve             = sb_swerve;
     this.xSpdFunction          = xSpdFunction;
     this.ySpdFunction          = ySpdFunction;
     this.turningSpdFunction    = turningSpdFunction;
     this.fieldOrientedFunction = fieldOrientedFunction;
+    this.resetGyro             = resetGyro;
 
     //Quantidade de mudanças que podem ocorrer por segundo
     this.xLimiter       = new SlewRateLimiter(3);
@@ -50,6 +53,12 @@ public class SwerveJoystickCmd extends Command {
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
     double turningSpeed = turningSpdFunction.get();
+    boolean resetG = resetGyro.get();
+
+    if (resetG && !resetBlock) {
+      sb_swerve.zeroHeading();
+    }
+    resetBlock = resetG;
 
     //Impõe valor mínimo para a execução
     xSpeed       = Math.abs(xSpeed)       > 0.05 ? xSpeed : 0.0;

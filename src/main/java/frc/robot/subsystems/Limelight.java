@@ -8,57 +8,66 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
 
-  NetworkTable table   = NetworkTableInstance.getDefault().getTable("limelight");
-  NetworkTableEntry tx = table.getEntry("tx");
-  NetworkTableEntry ty = table.getEntry("ty");
-  NetworkTableEntry ta = table.getEntry("ta");
-  NetworkTableEntry tid = table.getEntry("tid");
+  //Criação da Limelight
+  NetworkTable      table = NetworkTableInstance.getDefault().getTable("limelight");
+  NetworkTableEntry tx    = table.getEntry("tx");
+  NetworkTableEntry ty    = table.getEntry("ty");
+  NetworkTableEntry ta    = table.getEntry("ta");
+  NetworkTableEntry tid   = table.getEntry("tid");
 
   double x,y,area,id;
 
   public Limelight() {}
 
+  //Função de setagem das luzes da Limelight
   public void setMode (int mode) {
     table.getEntry("ledMode").setNumber(mode);
   }
 
+  //Obtém eixo X em relação há AprilTag
   public double getX () {
     return x;
   }
 
+  //Obtém proprocional para o ajuste do robô em relação ao eixo X da AprilTag
   public double getTrackX() {
-    return x * 0.02;
+    return x * 0.01;
   }
 
+  //Obtém eixo Y em relação há AprilTag
   public double getY () {
     return y;
   }
 
+  //Obtém proprocional para o ajuste do robô em relação ao eixo Y da AprilTag
   public double getTrackY() {
-    return y * 0.02;
+    return y * 0.023;
   }
 
+  //Obtém id da AprilTag
   public Boolean tagSpeaker () {
     return id == 4 || id == 7;
   }
- 
-  /* 
-  public Boolean tagSource () {
-    return id == 1 || id == 2 || id == 9 || id == 10;
-  }*/
+
+  //Obtém AprilTag identificada
+  public Boolean noTag () {
+    return id <= 0;
+  }
 
   @Override
   public void periodic() {
+
+    //Localização e id da AprilTag
     x    = tx.getDouble(0.0);
-    y    = ty.getDouble(0.0) + 8.0;
+    y    = ty.getDouble(0.0) + 6.0;
     area = ta.getDouble(0.0);
     id   = tid.getDouble(0.0);
     
     //post to smart dashboard periodically
-    SmartDashboard.putNumber("getTrack", getTrackX());
+    SmartDashboard.putNumber("getTrack", getTrackX()); 
     SmartDashboard.putNumber("getTrack", getTrackY());
     SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", Math.abs(getY()));
+    SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
     SmartDashboard.putNumber("LimelightID", id);
 

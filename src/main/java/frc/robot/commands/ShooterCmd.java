@@ -32,12 +32,12 @@ public class ShooterCmd extends InstantCommand {
   @Override
   public void execute() {
     
-    if(timer.get() < 1){
+    if(timer.get() < 2){
       sb_shooter.setShooter(1);
       sb_conveyor.setConveyor(0.6);
-    } else if (timer.get() < 1.7) {
+    } else if (timer.get() < 2.7) {
       sb_conveyor.setConveyor(-0.7);
-    } else if (timer.get() >= 2.5){
+    } else if (timer.get() >= 2.7){
       sb_conveyor.setConveyor(0);
       sb_shooter.setShooter(0);
       isFinish = true;

@@ -13,7 +13,7 @@ public class Conveyor extends SubsystemBase {
 
   //Função de setagem da velocidade do Climber
   public void setConveyor(double vel) { 
-      conveyor.set(-vel); 
+      conveyor.set(vel); 
   }
 
   @Override

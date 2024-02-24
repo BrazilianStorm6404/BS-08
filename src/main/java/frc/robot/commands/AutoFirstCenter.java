@@ -32,22 +32,24 @@ public class AutoFirstCenter extends SequentialCommandGroup {
         sb_conveyor = conveyor;
         sb_intake   = intake;
 
+        sb_swerve.zeroHeading();
+
         // Configuração da trajetória com uma velocidade máxima de 3 unidades/s e uma aceleração máxima de 3 unidades/s^2
-        TrajectoryConfig config = new TrajectoryConfig(2, 1)
+        TrajectoryConfig config = new TrajectoryConfig(1, 0.7)
                                       .setKinematics(SwerveConstants.kinematics);
 
         // Geração de uma trajetória de teste
         Trajectory trajectoryFwd = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
-                List.of(new Translation2d(.05,0)),
-            new Pose2d(0.1, 0, new Rotation2d(Math.toRadians(0))),
+                List.of(new Translation2d(.215,0)),
+            new Pose2d(0.43, 0, new Rotation2d(Math.toRadians(0))),
             config
         );
 
         // Geração de uma trajetória de teste
         Trajectory trajectoryBack = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0.1, 0, new Rotation2d(Math.toRadians(0))),
-                List.of(new Translation2d(.05,0)),
+            new Pose2d(0.43, 0, new Rotation2d(Math.toRadians(0))),
+                List.of(new Translation2d(.215,0)),
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
             config.setReversed(true)
         );
@@ -55,7 +57,7 @@ public class AutoFirstCenter extends SequentialCommandGroup {
         Trajectory trajectoryFinal = trajectoryBack.concatenate(trajectoryFwd);
         
         // Configuração de um controlador PID (pid soma com o interno)
-        var thetaController = new ProfiledPIDController(0.5,0,0,SwerveAutoConstants.kThetaControllerConstraints);
+        var thetaController = new ProfiledPIDController(0.01,0,0,SwerveAutoConstants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         PIDController xPID = new PIDController(0.001, 0, 0);
@@ -75,7 +77,7 @@ public class AutoFirstCenter extends SequentialCommandGroup {
 
         // Sequência de comandos
         addCommands(
-            new ShooterCmd(sb_shooter, sb_conveyor),
+            //new ShooterCmd(sb_shooter, sb_conveyor)
             new IntakeCmd(intake, conveyor, true),
             new InstantCommand(() -> sb_swerve.resetOdometry(trajectoryFinal.getInitialPose())),  
             finalControllerCommand,

@@ -15,10 +15,11 @@ public class IntakeCmd extends InstantCommand {
     sb_intake = intake;
     sb_conveyor = conveyor;
     isActivated = activated;
+    isFinish = false;
   }
 
   @Override
-  public void initialize() {
+  public void initialize() { 
   }
 
   @Override

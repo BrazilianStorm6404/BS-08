@@ -31,7 +31,7 @@ public class Limelight extends SubsystemBase {
 
   //Obtém proprocional para o ajuste do robô em relação ao eixo X da AprilTag
   public double getTrackX() {
-    return x * 0.01;
+    return x * 0.013;
   }
 
   //Obtém eixo Y em relação há AprilTag
@@ -41,7 +41,7 @@ public class Limelight extends SubsystemBase {
 
   //Obtém proprocional para o ajuste do robô em relação ao eixo Y da AprilTag
   public double getTrackY() {
-    return y * 0.023;
+    return y * 0.025;
   }
 
   //Obtém id da AprilTag

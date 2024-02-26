@@ -4,10 +4,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.DriverConstants;
+import frc.robot.commands.AutoBlueLeftAndRedRight;
 import frc.robot.commands.AutoFirstCenter;
 import frc.robot.commands.AutoSecondCenter;
+import frc.robot.commands.AutoThirdCenter;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.commands.TestAuto;
+import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Intake;
@@ -30,6 +33,7 @@ public class RobotContainer {
   Conveyor  sb_conveyor = new Conveyor();
   Vision    sb_vision   = new Vision();
   Climber   sb_climber  = new Climber();
+  Amp       sb_amp      = new Amp();
 
   //Variáveis intermediarias de trackeamento
   double trackCorrectionX, trackCorrectionY;
@@ -61,6 +65,19 @@ public class RobotContainer {
       }
 
     }, sb_shooter));
+
+    //Amp
+    sb_amp.setDefaultCommand(new RunCommand(() -> {
+
+      if (copilot.getRightBumper()){
+        sb_amp.setAmp(0.8);
+      } else if (copilot.getLeftBumper()) {
+        sb_amp.setAmp(-0.8);
+      } else {
+        sb_amp.setAmp(0);
+      }
+
+    }, sb_amp));
  
     //Climber
     sb_climber.setDefaultCommand(new RunCommand(() -> {
@@ -81,7 +98,7 @@ public class RobotContainer {
       if (pilot.getRightTriggerAxis() != 0){
         sb_intake.setIntake(1);
       } else if (pilot.getLeftTriggerAxis() != 0){
-        sb_intake.setIntake(-0.5);
+        sb_intake.setIntake(-0.8);
       } else {
         sb_intake.setIntake(0);
       }
@@ -92,14 +109,14 @@ public class RobotContainer {
     sb_conveyor.setDefaultCommand(new RunCommand(() -> {
 
       if (pilot.getRightTriggerAxis() != 0) {
-        sb_conveyor.setConveyor(0.5);
+        sb_conveyor.setConveyor(0.3);
       } else if (copilot.getLeftTriggerAxis() != 0) {
         sb_conveyor.setConveyor(-0.4);
         if (copilot.getRightTriggerAxis() != 0) {
         sb_conveyor.setConveyor(0.7);
         }
       }   else {
-        sb_conveyor.setConveyor(copilot.getRightTriggerAxis());//pilot.getLeftTriggerAxis() - pilot.getRightTriggerAxis() * 0.2);
+        sb_conveyor.setConveyor(0);
       }
 
     }, sb_conveyor));
@@ -117,10 +134,10 @@ public class RobotContainer {
   
   public Command getAutonomousCommand() {
 
-    //return null;
+    return null;
     //return new TestAuto(sb_swerve, sb_shooter, sb_conveyor, sb_intake);
     //return new AutoFirstCenter(sb_swerve, sb_shooter, sb_conveyor, sb_intake);
-    return new AutoSecondCenter(sb_swerve, sb_shooter, sb_conveyor, sb_intake);
+    //return new AutoSecondCenter(sb_swerve, sb_shooter, sb_conveyor, sb_intake);
     //return new AutoThirdCenter(sb_swerve, sb_shooter, sb_conveyor, sb_intake);
 
     //OBS: Lados em relação a visão do piloto na quadra

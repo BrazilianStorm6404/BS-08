@@ -35,7 +35,7 @@ public class AutoFirstCenter extends SequentialCommandGroup {
         sb_swerve.zeroHeading();
 
         // Configuração da trajetória com uma velocidade máxima de 3 unidades/s e uma aceleração máxima de 3 unidades/s^2
-        TrajectoryConfig config = new TrajectoryConfig(1, 0.7)
+        TrajectoryConfig config = new TrajectoryConfig(2, 0.8)
                                       .setKinematics(SwerveConstants.kinematics);
 
         // Geração de uma trajetória de teste

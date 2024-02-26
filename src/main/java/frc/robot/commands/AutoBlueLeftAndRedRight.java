@@ -39,15 +39,14 @@ public class AutoBlueLeftAndRedRight extends SequentialCommandGroup {
         // Geração de uma trajetória de teste
         Trajectory trajectoryFwd = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
-                List.of(new Translation2d(.05,0)),
-            new Pose2d(0.1, 0, new Rotation2d(Math.toRadians(0))),
+                List.of(new Translation2d(.1 ,0), new Translation2d(.2, -.38)),
+            new Pose2d(.35, -.38, new Rotation2d(Math.toRadians(0))),
             config
         );
 
-        // Geração de uma trajetória de teste
         Trajectory trajectoryBack = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0.1, 0, new Rotation2d(Math.toRadians(0))),
-                List.of(new Translation2d(.05,0)),
+            new Pose2d(.35, -.38, new Rotation2d(Math.toRadians(0))),
+                List.of(new Translation2d(.2,-.38), new Translation2d(.1, 0)),
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
             config.setReversed(true)
         );
@@ -55,11 +54,11 @@ public class AutoBlueLeftAndRedRight extends SequentialCommandGroup {
         Trajectory trajectoryFinal = trajectoryBack.concatenate(trajectoryFwd);
         
         // Configuração de um controlador PID (pid soma com o interno)
-        var thetaController = new ProfiledPIDController(0.5,0,0,SwerveAutoConstants.kThetaControllerConstraints);
+        var thetaController = new ProfiledPIDController(0,0,0,SwerveAutoConstants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        PIDController xPID = new PIDController(0.001, 0, 0);
-        PIDController yPID = new PIDController(0.001, 0, 0);    
+        PIDController xPID = new PIDController(0.0, 0, 0);
+        PIDController yPID = new PIDController(0.0, 0, 0);    
 
         // Criação de um comando de controle Swerve usando a trajetória gerada
         SwerveControllerCommand finalControllerCommand = new SwerveControllerCommand(
@@ -75,13 +74,13 @@ public class AutoBlueLeftAndRedRight extends SequentialCommandGroup {
 
         // Sequência de comandos
         addCommands(
-        new ShooterCmd(sb_shooter, sb_conveyor),
-        new IntakeCmd(intake, conveyor, true),
+        //new ShooterCmd(sb_shooter, sb_conveyor),
+        //new IntakeCmd(intake, conveyor, true),
         new InstantCommand(() -> sb_swerve.resetOdometry(trajectoryFinal.getInitialPose())),  
         finalControllerCommand,
-        new InstantCommand(() -> sb_swerve.stopModules()),
-        new IntakeCmd(intake, conveyor, false),
-        new ShooterCmd(sb_shooter, sb_conveyor)
+        new InstantCommand(() -> sb_swerve.stopModules())
+        //new IntakeCmd(intake, conveyor, false),
+        //new ShooterCmd(sb_shooter, sb_conveyor)
         );
     }
 }

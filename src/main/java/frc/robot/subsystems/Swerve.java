@@ -59,7 +59,7 @@ public class Swerve extends SubsystemBase {
 
   //Obtém a posição do giroscópio em relação a quadra
   public double getHeading(){
-    return Math.IEEEremainder((navx.getAngle() + gyroOffset) % 360, 360.0);
+    return Math.IEEEremainder((navx.getAngle()) % 360, 360.0);
   }
 
   //Obtém a angulação da quadra 

@@ -76,11 +76,11 @@ public class TestAuto extends SequentialCommandGroup {
         // Sequência de comandos
         addCommands(
         new ShooterCmd(sb_shooter, sb_conveyor),
-        new IntakeCmd(intake, conveyor, true),
+        new IntakeCmd(intake, conveyor, shooter, true),
         new InstantCommand(() -> sb_swerve.resetOdometry(trajectoryFinal.getInitialPose())),  
         finalControllerCommand,
         new InstantCommand(() -> sb_swerve.stopModules()),
-        new IntakeCmd(intake, conveyor, false),
+        new IntakeCmd(intake, conveyor, shooter, false),
         new ShooterCmd(sb_shooter, sb_conveyor)
         );
     }

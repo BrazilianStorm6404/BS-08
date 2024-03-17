@@ -20,13 +20,13 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
-public class AutoThirdCenter extends SequentialCommandGroup {
+public class AutoThirdCenterRed extends SequentialCommandGroup {
 
     Shooter  sb_shooter;
     Conveyor sb_conveyor;
     Intake   sb_intake;
 
-    public AutoThirdCenter (Swerve sb_swerve, Shooter shooter, Conveyor conveyor, Intake intake) {
+    public AutoThirdCenterRed (Swerve sb_swerve, Shooter shooter, Conveyor conveyor, Intake intake) {
 
         sb_shooter  = shooter;
         sb_conveyor = conveyor;
@@ -54,28 +54,28 @@ public class AutoThirdCenter extends SequentialCommandGroup {
 
         Trajectory trajectoryFwd2 = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
-                List.of(new Translation2d(-.15,-.35)),
-            new Pose2d(-.43, -.35, new Rotation2d(Math.toRadians(0))),
+                List.of(new Translation2d(-.15,.35)),
+            new Pose2d(-.43, .35, new Rotation2d(Math.toRadians(0))),
             config
         );
 
         Trajectory trajectoryBack2 = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(-.43, -.35, new Rotation2d(Math.toRadians(0))),
-                List.of(new Translation2d(-.43,0.01), new Translation2d(-.215, 0.01)),
-            new Pose2d(0, 0.01, new Rotation2d(Math.toRadians(0))),
+            new Pose2d(-.43, .35, new Rotation2d(Math.toRadians(0))),
+                List.of(new Translation2d(-.43,-0.01), new Translation2d(-.215,-0.01)),
+            new Pose2d(0, -0.01, new Rotation2d(Math.toRadians(0))),
             config
         );
 
         Trajectory trajectoryFwd3 = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
-                List.of(new Translation2d(-.15,.33)),
-            new Pose2d(-.295, .33, new Rotation2d(Math.toRadians(0))),
+                List.of(new Translation2d(-.15,-.33)),
+            new Pose2d(-.295, -.33, new Rotation2d(Math.toRadians(0))),
             config
         );
 
         Trajectory trajectoryBack3 = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(-.295, .33, new Rotation2d(Math.toRadians(0))),
-                List.of(new Translation2d(-.15,.33), new Translation2d(-.15,0), new Translation2d(-.07, 0)),
+            new Pose2d(-.295, -.33, new Rotation2d(Math.toRadians(0))),
+                List.of(new Translation2d(-.15,-.33), new Translation2d(-.15,0), new Translation2d(-.07, 0)),
             new Pose2d(0, .0, new Rotation2d(Math.toRadians(0))),
             config
         );
@@ -148,23 +148,23 @@ public class AutoThirdCenter extends SequentialCommandGroup {
         );
         // Sequência de comandos
         addCommands(
-        new ShooterCmd(sb_shooter, sb_conveyor),
-        new IntakeCmd(intake, conveyor, shooter, true),
-        new InstantCommand(() -> sb_swerve.resetOdometry(FirstTrajectory.getInitialPose())),  
-        firstControllerCommand,
-        new IntakeCmd(intake, conveyor,shooter, false),
-        new ShooterCmd(sb_shooter, sb_conveyor),
-        new IntakeCmd(intake, conveyor,shooter, true),
-        secondControllerCommand,
-        thirdControllerCommand,
-        new IntakeCmd(intake, conveyor,shooter, false),
-        new ShooterCmd(sb_shooter, sb_conveyor),
-        new IntakeCmd(intake, conveyor,shooter, true),
-        fourthControllerCommand,
-        fifthControllerCommand,
-        new InstantCommand(() -> sb_swerve.stopModules()),
-        new IntakeCmd(intake, conveyor,shooter, false),
-        new ShooterCmd(sb_shooter, sb_conveyor)
+            new ShooterCmd(sb_shooter, sb_conveyor),
+            new IntakeCmd(intake, conveyor, shooter, true),
+            new InstantCommand(() -> sb_swerve.resetOdometry(FirstTrajectory.getInitialPose())),  
+            firstControllerCommand,
+            new IntakeCmd(intake, conveyor,shooter, false),
+            new ShooterCmd(sb_shooter, sb_conveyor),
+            new IntakeCmd(intake, conveyor,shooter, true),
+            secondControllerCommand,
+            thirdControllerCommand,
+            new IntakeCmd(intake, conveyor,shooter, false),
+            new ShooterCmd(sb_shooter, sb_conveyor),
+            new IntakeCmd(intake, conveyor,shooter, true),
+            fourthControllerCommand,
+            fifthControllerCommand,
+            new InstantCommand(() -> sb_swerve.stopModules()),
+            new IntakeCmd(intake, conveyor,shooter, false),
+            new ShooterCmd(sb_shooter, sb_conveyor)
         );
     }
 }

@@ -6,11 +6,14 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Amp extends SubsystemBase {
   
-  WPI_VictorSPX amp = new WPI_VictorSPX(14);
+  WPI_VictorSPX amp   = new WPI_VictorSPX(14);
+  DigitalInput  limit = new DigitalInput(0);
 
   public Amp() {}
 
@@ -22,5 +25,6 @@ public class Amp extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("limit", limit.get());
   }
 }

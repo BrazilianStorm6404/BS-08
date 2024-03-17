@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
 
   //Função de setagem da velocidade do Intake
   public void setIntake(double vel) {
-    frontIntake.set(vel * 0.8);
+    frontIntake.set(vel);
     backIntake.set(-vel);
   }
 

@@ -58,8 +58,8 @@ public class Limelight extends SubsystemBase {
   public void periodic() {
 
     //Localização e id da AprilTag
-    x    = tx.getDouble(0.0);
-    y    = ty.getDouble(0.0) + 6.0;
+    x    = tx.getDouble(0.0) - 4.0;
+    y    = ty.getDouble(0.0) + 5.0;
     area = ta.getDouble(0.0);
     id   = tid.getDouble(0.0);
     

@@ -111,18 +111,18 @@ public class AutoSecondCenter extends SequentialCommandGroup {
         );
         // Sequência de comandos
         addCommands(
-        //new ShooterCmd(sb_shooter, sb_conveyor),
-        //new IntakeCmd(intake, conveyor, true),
+        new ShooterCmd(sb_shooter, sb_conveyor),
+        new IntakeCmd(intake, conveyor, shooter, true),
         new InstantCommand(() -> sb_swerve.resetOdometry(FirstTrajectory.getInitialPose())),  
         firstControllerCommand,
-        //new IntakeCmd(intake, conveyor, false),
-        //new ShooterCmd(sb_shooter, sb_conveyor),
-        //new IntakeCmd(intake, conveyor, true),
+        new IntakeCmd(intake, conveyor, shooter, false),
+        new ShooterCmd(sb_shooter, sb_conveyor),
+        new IntakeCmd(intake, conveyor, shooter, true),
         secondControllerCommand,
         thirdControllerCommand,
-        new InstantCommand(() -> sb_swerve.stopModules())
-        //new IntakeCmd(intake, conveyor, false),
-        //new ShooterCmd(sb_shooter, sb_conveyor)
+        new InstantCommand(() -> sb_swerve.stopModules()),
+        new IntakeCmd(intake, conveyor, shooter, false),
+        new ShooterCmd(sb_shooter, sb_conveyor)
         );
     }
 }

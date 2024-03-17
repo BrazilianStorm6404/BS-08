@@ -57,11 +57,11 @@ public class AutoFirstCenter extends SequentialCommandGroup {
         Trajectory trajectoryFinal = trajectoryBack.concatenate(trajectoryFwd);
         
         // Configuração de um controlador PID (pid soma com o interno)
-        var thetaController = new ProfiledPIDController(0.01,0,0,SwerveAutoConstants.kThetaControllerConstraints);
+        var thetaController = new ProfiledPIDController(0,0,0,SwerveAutoConstants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        PIDController xPID = new PIDController(0.001, 0, 0);
-        PIDController yPID = new PIDController(0.001, 0, 0);    
+        PIDController xPID = new PIDController(0, 0, 0);
+        PIDController yPID = new PIDController(0, 0, 0);    
 
         // Criação de um comando de controle Swerve usando a trajetória gerada
         SwerveControllerCommand finalControllerCommand = new SwerveControllerCommand(
@@ -77,12 +77,12 @@ public class AutoFirstCenter extends SequentialCommandGroup {
 
         // Sequência de comandos
         addCommands(
-            //new ShooterCmd(sb_shooter, sb_conveyor)
-            new IntakeCmd(intake, conveyor, true),
+            new ShooterCmd(sb_shooter, sb_conveyor),
+            new IntakeCmd(intake, conveyor, shooter, true),
             new InstantCommand(() -> sb_swerve.resetOdometry(trajectoryFinal.getInitialPose())),  
             finalControllerCommand,
             new InstantCommand(() -> sb_swerve.stopModules()),
-            new IntakeCmd(intake, conveyor, false),
+            new IntakeCmd(intake, conveyor, shooter, false),
             new ShooterCmd(sb_shooter, sb_conveyor)
         );
     }

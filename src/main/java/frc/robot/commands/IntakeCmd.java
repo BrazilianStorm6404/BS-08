@@ -3,17 +3,20 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class IntakeCmd extends InstantCommand {
 
   Intake sb_intake;
   Conveyor sb_conveyor;
+  Shooter sb_shooter;
   boolean isFinish = false, isActivated = false;
 
   /** Creates a new ShooterCmd. */
-  public IntakeCmd(Intake intake, Conveyor conveyor, Boolean activated) {
+  public IntakeCmd(Intake intake, Conveyor conveyor, Shooter shooter, Boolean activated) {
     sb_intake = intake;
     sb_conveyor = conveyor;
+    sb_shooter = shooter;
     isActivated = activated;
     isFinish = false;
   }
@@ -25,11 +28,13 @@ public class IntakeCmd extends InstantCommand {
   @Override
   public void execute() {
     if(isActivated) {
-      sb_intake.setIntake(0.8);
-     sb_conveyor.setConveyor(-0.2);
+      sb_intake.setIntake(1);
+      sb_conveyor.setConveyor(.5);
+      sb_shooter.setShooter(-1);
     } else {
       sb_intake.setIntake(0);
       sb_conveyor.setConveyor(0);
+      sb_shooter.setShooter(0);
     }
     
     isFinish = true;

@@ -19,15 +19,26 @@ public class Shooter extends SubsystemBase {
 
   //Função de setagem do Shooter
   public void setShooter(double vel) {
-    
+
     frontShoot.set(vel);
     backShoot.set(vel * 0.8);
 
-    //Verificação da condição de shoot
+      //Verificação da condição de shoot
     if(vel!=0 && (Math.abs(limelight.getX()) < 5) && (Math.abs(limelight.getY()) < 2) && limelight.tagSpeaker()) {
       limelight.setMode(2);
     } else {
       limelight.setMode(1);
+    }
+    
+  }
+
+  public void retrain(boolean retrain) {
+    if (retrain) {
+      frontShoot.set(-0.7);
+      backShoot.set(-0.7);
+    } else {
+      frontShoot.set(0);
+      backShoot.set(0);
     }
   }
 

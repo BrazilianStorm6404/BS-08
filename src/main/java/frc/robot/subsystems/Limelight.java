@@ -15,7 +15,7 @@ public class Limelight extends SubsystemBase {
   NetworkTableEntry ta    = table.getEntry("ta");
   NetworkTableEntry tid   = table.getEntry("tid");
 
-  double x,y,area,id;
+  double x,y,area,id, xTele;
 
   public Limelight() {}
 
@@ -31,7 +31,10 @@ public class Limelight extends SubsystemBase {
 
   //Obtém proprocional para o ajuste do robô em relação ao eixo X da AprilTag
   public double getTrackX() {
-    return x * 0.013;
+    return x * 0.015;
+  }
+  public double getTrackTeleX() {
+    return xTele * 0.013;
   }
 
   //Obtém eixo Y em relação há AprilTag
@@ -41,7 +44,7 @@ public class Limelight extends SubsystemBase {
 
   //Obtém proprocional para o ajuste do robô em relação ao eixo Y da AprilTag
   public double getTrackY() {
-    return y * 0.025;
+    return y * 0.018;
   }
 
   //Obtém id da AprilTag
@@ -58,14 +61,15 @@ public class Limelight extends SubsystemBase {
   public void periodic() {
 
     //Localização e id da AprilTag
-    x    = tx.getDouble(0.0) - 4.0;
-    y    = ty.getDouble(0.0) + 5.0;
+    x    = tx.getDouble(0.0) + (tagSpeaker() ? 10.0 : 0);
+    xTele = tx.getDouble(0.0) + (tagSpeaker() ? 6. : 0);
+    y    = ty.getDouble(0.0) - (tagSpeaker() ? .5 : 0);
     area = ta.getDouble(0.0);
     id   = tid.getDouble(0.0);
     
     //post to smart dashboard periodically
-    SmartDashboard.putNumber("getTrack", getTrackX()); 
-    SmartDashboard.putNumber("getTrack", getTrackY());
+    SmartDashboard.putNumber("getTrackx", getTrackX()); 
+    SmartDashboard.putNumber("getTracky", getTrackY());
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);

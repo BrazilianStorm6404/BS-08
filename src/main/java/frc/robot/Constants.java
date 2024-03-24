@@ -30,7 +30,7 @@ public final class Constants {
   // Swerve Autonônomo constants
   public static class SwerveAutoConstants {
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-      new TrapezoidProfile.Constraints(Math.PI,Math.PI);
+      new TrapezoidProfile.Constraints(0,0);
   }
 
   // Intake IDs

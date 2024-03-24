@@ -4,23 +4,41 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Swerve;
 
 public class ShooterCmd extends InstantCommand {
 
   Shooter sb_shooter;
   Conveyor sb_conveyor;
-  boolean isFinish = false;
+  boolean isFinish = false, init = true, track = false;
   Timer timer;
+  Limelight sb_limelight;
+  Swerve sb_swerve;
 
   /** Creates a new ShooterCmd. */
+  public ShooterCmd(Shooter shooter, Conveyor conveyor, Limelight limelight, Swerve swerve) {
+    timer = new Timer();
+    sb_shooter   = shooter;
+    sb_conveyor  = conveyor;
+    sb_limelight = limelight;
+    sb_swerve    = swerve;
+    track = true;
+
+  }
   public ShooterCmd(Shooter shooter, Conveyor conveyor) {
     timer = new Timer();
-    sb_shooter = shooter;
-    sb_conveyor = conveyor;
+    sb_shooter   = shooter;
+    sb_conveyor  = conveyor;
+    track = false;
+
   }
 
   @Override
@@ -31,16 +49,31 @@ public class ShooterCmd extends InstantCommand {
 
   @Override
   public void execute() {
-    
-    if(timer.get() < 2){
-      sb_shooter.setShooter(1);
-      sb_conveyor.setConveyor(-0.4);
-    } else if (timer.get() < 3) {
-      sb_conveyor.setConveyor(0.7);
-    } else if (timer.get() >= 3){
-      sb_conveyor.setConveyor(0);
-      sb_shooter.setShooter(0);
-      isFinish = true;
+
+    if (sb_limelight.tagSpeaker() && Math.abs(sb_limelight.getX()) > 0.3 &&  Math.abs(sb_limelight.getY()) > 0.3 && timer.get() < 3 && track) {
+
+      ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-sb_limelight.getTrackY(), -sb_limelight.getTrackX(), 0, sb_swerve.getRotation2d());
+      SwerveModuleState[] moduleStates = SwerveConstants.kinematics.toSwerveModuleStates(chassisSpeeds);
+      sb_swerve.setModuleStates(moduleStates);
+
+    } else { 
+      sb_swerve.stopModules();
+      if(init && track) {
+        timer.reset();
+        timer.start();
+        init = false;
+      }
+      if(timer.get() < 1){
+        sb_shooter.setShooter(1);
+        sb_conveyor.setConveyor(-0.6);
+      } else if (timer.get() < 2) {
+        sb_conveyor.setConveyor(0.8);
+      } else if (timer.get() >= 2){
+        sb_conveyor.setConveyor(0);
+        sb_shooter.setShooter(0);
+        isFinish = true;
+      }
+      
     }
 
   }

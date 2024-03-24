@@ -29,8 +29,8 @@ public class IntakeCmd extends InstantCommand {
   public void execute() {
     if(isActivated) {
       sb_intake.setIntake(1);
-      sb_conveyor.setConveyor(.5);
-      sb_shooter.setShooter(-1);
+      sb_conveyor.setConveyor(1);
+      sb_shooter.setShooter(-0.6);
     } else {
       sb_intake.setIntake(0);
       sb_conveyor.setConveyor(0);

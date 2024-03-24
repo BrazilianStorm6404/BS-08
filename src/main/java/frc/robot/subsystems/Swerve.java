@@ -21,7 +21,7 @@ public class Swerve extends SubsystemBase {
   SwerveModule frontLeft  = new SwerveModule(1, 2, false, true, 9, 0);
   SwerveModule frontRight = new SwerveModule(3, 4, false, true, 10, 0);
   SwerveModule backLeft   = new SwerveModule(5, 6, false, true, 11, 0);
-  SwerveModule backRight  = new SwerveModule(7, 8, false, true, 12, 0);
+  SwerveModule backRight  = new SwerveModule(8, 7, false, true, 12, 0);
 
   //Obtém posições dos módulos
   SwerveModulePosition[] modulePositions = {frontLeft.getSwerveModulePosition(), frontRight.getSwerveModulePosition(), 
@@ -31,7 +31,7 @@ public class Swerve extends SubsystemBase {
   AHRS navx = new AHRS(SPI.Port.kMXP);
 
   //Criaçaõ da Odometria
-  SwerveDriveOdometry odometer = new SwerveDriveOdometry(SwerveConstants.kinematics, new Rotation2d(0), modulePositions);
+  SwerveDriveOdometry odometer = new SwerveDriveOdometry(SwerveConstants.kinematics, getRotation2d(), modulePositions);
 
   //Offset da posição inicial do robô
   double gyroOffset = 0;
@@ -59,14 +59,14 @@ public class Swerve extends SubsystemBase {
 
   //Obtém a posição do giroscópio em relação a quadra
   public double getHeading(){
-    return Math.IEEEremainder(((navx.getAngle()-50) % 360), 360.0);
+    return Math.IEEEremainder((navx.getAngle() + gyroOffset) % 360, 360.0); 
   }
 
   //Obtém a angulação da quadra 
   public Rotation2d getRotation2d() {
     return Rotation2d.fromDegrees(-getHeading());
   }
-
+  
   //Obtém a posição do robô em um plano 2D 
   public Pose2d getPose() {
     return odometer.getPoseMeters();

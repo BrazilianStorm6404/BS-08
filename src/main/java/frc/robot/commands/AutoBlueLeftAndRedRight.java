@@ -32,26 +32,27 @@ public class AutoBlueLeftAndRedRight extends SequentialCommandGroup {
         sb_conveyor = conveyor;
         sb_intake   = intake;
 
+        sb_swerve.setGyroOffset(310);
         // Configuração da trajetória com uma velocidade máxima de 3 unidades/s e uma aceleração máxima de 3 unidades/s^2
-        TrajectoryConfig config = new TrajectoryConfig(2, 1)
+        TrajectoryConfig config = new TrajectoryConfig(1, 0.5)
                                       .setKinematics(SwerveConstants.kinematics);
 
         // Geração de uma trajetória de teste
-        Trajectory trajectoryFwd = TrajectoryGenerator.generateTrajectory(
+        Trajectory trajectoryBack = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
-                List.of(new Translation2d(.1 ,0), new Translation2d(.2, -.38)),
+                List.of(new Translation2d(.25, -.38)),
             new Pose2d(.35, -.38, new Rotation2d(Math.toRadians(0))),
             config
         );
 
-        Trajectory trajectoryBack = TrajectoryGenerator.generateTrajectory(
+        Trajectory trajectoryFwd = TrajectoryGenerator.generateTrajectory(
             new Pose2d(.35, -.38, new Rotation2d(Math.toRadians(0))),
                 List.of(new Translation2d(.2,-.38), new Translation2d(.1, 0)),
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
             config.setReversed(true)
         );
 
-        Trajectory trajectoryFinal = trajectoryBack.concatenate(trajectoryFwd);
+        Trajectory trajectoryFinal = trajectoryFwd.concatenate(trajectoryBack);
         
         // Configuração de um controlador PID (pid soma com o interno)
         var thetaController = new ProfiledPIDController(0,0,0,SwerveAutoConstants.kThetaControllerConstraints);

@@ -32,8 +32,9 @@ public class AutoBlueRightAndRedLeft extends SequentialCommandGroup {
         sb_conveyor = conveyor;
         sb_intake   = intake;
 
+        sb_swerve.setGyroOffset(50);
         // Configuração da trajetória com uma velocidade máxima de 3 unidades/s e uma aceleração máxima de 3 unidades/s^2
-        TrajectoryConfig config = new TrajectoryConfig(2, 1)
+        TrajectoryConfig config = new TrajectoryConfig(1, 0.5)
                                       .setKinematics(SwerveConstants.kinematics);
 
         // Geração de uma trajetória de teste

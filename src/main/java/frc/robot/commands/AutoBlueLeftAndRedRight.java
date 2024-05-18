@@ -32,7 +32,7 @@ public class AutoBlueLeftAndRedRight extends SequentialCommandGroup {
         sb_conveyor = conveyor;
         sb_intake   = intake;
 
-        sb_swerve.setGyroOffset(310);
+        sb_swerve.setGyroOffset(50);
         // Configuração da trajetória com uma velocidade máxima de 3 unidades/s e uma aceleração máxima de 3 unidades/s^2
         TrajectoryConfig config = new TrajectoryConfig(1, 0.5)
                                       .setKinematics(SwerveConstants.kinematics);
@@ -75,11 +75,11 @@ public class AutoBlueLeftAndRedRight extends SequentialCommandGroup {
 
         // Sequência de comandos
         addCommands(
-        //new ShooterCmd(sb_shooter, sb_conveyor),
+        new ShooterCmd(sb_shooter, sb_conveyor)
         //new IntakeCmd(intake, conveyor, true),
-        new InstantCommand(() -> sb_swerve.resetOdometry(trajectoryFinal.getInitialPose())),  
-        finalControllerCommand,
-        new InstantCommand(() -> sb_swerve.stopModules())
+        //new InstantCommand(() -> sb_swerve.resetOdometry(trajectoryFinal.getInitialPose())),  
+        //finalControllerCommand,
+        //new InstantCommand(() -> sb_swerve.stopModules())
         //new IntakeCmd(intake, conveyor, false),
         //new ShooterCmd(sb_shooter, sb_conveyor)
         );

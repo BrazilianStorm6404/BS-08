@@ -13,22 +13,23 @@ public class Shooter extends SubsystemBase {
   //Criaçaõ da Limelight dentro do Shooter
   Limelight limelight;
 
-  public Shooter(Limelight limelight) {
-    this.limelight = limelight;
+  public Shooter() {
+    //this.limelight = limelight;
   }
 
   //Função de setagem do Shooter
   public void setShooter(double vel) {
 
     frontShoot.set(vel);
-    backShoot.set(vel * 0.7);
+    backShoot.set(vel * 0.9);
 
-      //Verificação da condição de shoot
+    /* //Verificação da condição de shoot
     if(vel!=0 && (Math.abs(limelight.getX()) < 5) && (Math.abs(limelight.getY()) < 2) && limelight.tagSpeaker()) {
       limelight.setMode(2);
     } else {
       limelight.setMode(1);
     }
+    */
     
   }
 

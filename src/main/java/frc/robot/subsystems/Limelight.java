@@ -68,12 +68,12 @@ public class Limelight extends SubsystemBase {
     id   = tid.getDouble(0.0);
     
     //post to smart dashboard periodically
-    SmartDashboard.putNumber("getTrackx", getTrackX()); 
-    SmartDashboard.putNumber("getTracky", getTrackY());
-    SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightArea", area);
-    SmartDashboard.putNumber("LimelightID", id);
+    //SmartDashboard.putNumber("getTrackx", getTrackX()); 
+    //SmartDashboard.putNumber("getTracky", getTrackY());
+    //SmartDashboard.putNumber("LimelightX", x);
+    //SmartDashboard.putNumber("LimelightY", y);
+    //SmartDashboard.putNumber("LimelightArea", area);
+    //SmartDashboard.putNumber("LimelightID", id);
 
   }
 }

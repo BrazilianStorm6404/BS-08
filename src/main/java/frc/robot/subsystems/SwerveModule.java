@@ -108,9 +108,9 @@ public class SwerveModule {
         driveMotor.set(currentState.speedMetersPerSecond);
         turningMotor.set(turningPID.calculate(getTurningPosition(), currentState.angle.getDegrees() + 180));
 
-        SmartDashboard.putNumber("turningPID", turningPID.calculate(getTurningPosition(), currentState.angle.getDegrees() + 180));
-        SmartDashboard.putNumber("state.speedMetersPerSecond", currentState.speedMetersPerSecond);
-        SmartDashboard.putNumber("state.angle.", currentState.angle.getDegrees() + 180);
+        //SmartDashboard.putNumber("turningPID", turningPID.calculate(getTurningPosition(), currentState.angle.getDegrees() + 180));
+        //SmartDashboard.putNumber("state.speedMetersPerSecond", currentState.speedMetersPerSecond);
+        //SmartDashboard.putNumber("state.angle.", currentState.angle.getDegrees() + 180);
     }
 
     //Função de parar módulo

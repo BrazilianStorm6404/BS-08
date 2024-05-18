@@ -28,14 +28,15 @@ public class AutoFirstCenter extends SequentialCommandGroup {
     Intake   sb_intake;
     Limelight sb_limelight;
 
-    public AutoFirstCenter(Swerve sb_swerve, Shooter shooter, Conveyor conveyor, Intake intake, Limelight limelight) {
+    public AutoFirstCenter(Swerve sb_swerve, Shooter shooter, Conveyor conveyor, Intake intake) {
 
         sb_shooter   = shooter;
         sb_conveyor  = conveyor;
         sb_intake    = intake;
-        sb_limelight = limelight;
+        //sb_limelight = limelight;
 
         sb_swerve.zeroHeading();
+        sb_swerve.setGyroOffset(0);
 
         // Configuração da trajetória com uma velocidade máxima de 3 unidades/s e uma aceleração máxima de 3 unidades/s^2
         TrajectoryConfig config = new TrajectoryConfig(1, 0.8)
@@ -94,7 +95,7 @@ public class AutoFirstCenter extends SequentialCommandGroup {
         
         // Sequência de comandos
         addCommands(
-            //new ShooterCmd(sb_shooter, sb_conveyor),
+            new ShooterCmd(sb_shooter, sb_conveyor),
             new IntakeCmd(intake, conveyor, shooter, true),
             new InstantCommand(() -> sb_swerve.resetOdometry(trajectoryFwd.getInitialPose())),  
             Step1,
@@ -102,7 +103,7 @@ public class AutoFirstCenter extends SequentialCommandGroup {
             new InstantCommand(() -> sb_swerve.resetOdometry(trajectoryBack.getInitialPose())),
             Step2,
             new InstantCommand(() -> sb_swerve.stopModules()),
-            new ShooterCmd(sb_shooter, sb_conveyor, sb_limelight, sb_swerve)
+            new ShooterCmd(sb_shooter, sb_conveyor)
 
             );
     }

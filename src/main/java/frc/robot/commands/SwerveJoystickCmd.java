@@ -57,6 +57,7 @@ public class SwerveJoystickCmd extends Command {
 
     if (resetG && !resetBlock) {
       sb_swerve.zeroHeading();
+      sb_swerve.setGyroOffset(0);
     }
     resetBlock = resetG;
 

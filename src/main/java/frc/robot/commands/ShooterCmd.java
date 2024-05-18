@@ -20,24 +20,15 @@ public class ShooterCmd extends InstantCommand {
   Conveyor sb_conveyor;
   boolean isFinish = false, init = true, track = false;
   Timer timer;
-  Limelight sb_limelight;
+  //Limelight sb_limelight;
   Swerve sb_swerve;
 
   /** Creates a new ShooterCmd. */
-  public ShooterCmd(Shooter shooter, Conveyor conveyor, Limelight limelight, Swerve swerve) {
-    timer = new Timer();
-    sb_shooter   = shooter;
-    sb_conveyor  = conveyor;
-    sb_limelight = limelight;
-    sb_swerve    = swerve;
-    track = true;
-
-  }
+  
   public ShooterCmd(Shooter shooter, Conveyor conveyor) {
     timer = new Timer();
     sb_shooter   = shooter;
     sb_conveyor  = conveyor;
-    track = false;
 
   }
 
@@ -50,14 +41,7 @@ public class ShooterCmd extends InstantCommand {
   @Override
   public void execute() {
 
-    if (sb_limelight.tagSpeaker() && Math.abs(sb_limelight.getX()) > 0.3 &&  Math.abs(sb_limelight.getY()) > 0.3 && timer.get() < 3 && track) {
-
-      ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-sb_limelight.getTrackY(), -sb_limelight.getTrackX(), 0, sb_swerve.getRotation2d());
-      SwerveModuleState[] moduleStates = SwerveConstants.kinematics.toSwerveModuleStates(chassisSpeeds);
-      sb_swerve.setModuleStates(moduleStates);
-
-    } else { 
-      sb_swerve.stopModules();
+    
       if(init && track) {
         timer.reset();
         timer.start();
@@ -74,7 +58,7 @@ public class ShooterCmd extends InstantCommand {
         isFinish = true;
       }
       
-    }
+
 
   }
 

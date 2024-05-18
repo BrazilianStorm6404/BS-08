@@ -34,8 +34,8 @@ public class RobotContainer {
 
   //Criação dos subsistemas
   Swerve    sb_swerve   = new Swerve();
-  Limelight sb_ll       = new Limelight();
-  Shooter   sb_shooter  = new Shooter(sb_ll);
+  //Limelight sb_ll       = new Limelight();
+  Shooter   sb_shooter  = new Shooter();
   Intake    sb_intake   = new Intake();
   Conveyor  sb_conveyor = new Conveyor();
   Vision    sb_vision   = new Vision();
@@ -59,22 +59,23 @@ public class RobotContainer {
       if (copilot.getAButton()) {
         sb_shooter.retrain(true);
       }else if (copilot.getLeftTriggerAxis() != 0){
-        trackCorrectionX = sb_ll.getTrackTeleX();
+        /*trackCorrectionX = sb_ll.getTrackTeleX();
         trackCorrectionY = sb_ll.getTrackY();
         if(sb_ll.noTag()) {
           trackCorrectionX  = 0;
           trackCorrectionY  = 0;
         }
+        */
         sb_shooter.setShooter(copilot.getLeftTriggerAxis());
       } else if (pilot.getRightTriggerAxis() != 0){
-        sb_shooter.setShooter(-1);
+        sb_shooter.setShooter(-0.6);
       } else if (copilot.getRightBumper()) {
         sb_shooter.setShooter(-0.6);
       } else {
         sb_shooter.setShooter(0);
         sb_shooter.retrain(false);
       }
-
+      
     }, sb_shooter));
 
     //Amp
@@ -119,13 +120,14 @@ public class RobotContainer {
     //Conveyor
     sb_conveyor.setDefaultCommand(new RunCommand(() -> {
 
-      if (pilot.getRightTriggerAxis() != 0) {
+      if (pilot.getRightTriggerAxis() != 0 && copilot.getLeftTriggerAxis() == 0) {
         sb_conveyor.setConveyor(0.8);
       } else if (copilot.getLeftTriggerAxis() != 0) {
         sb_conveyor.setConveyor(-0.6);
         if (copilot.getRightTriggerAxis() != 0) {
-        sb_conveyor.setConveyor(0.8);//0.7
+        sb_conveyor.setConveyor(0.5);//0.7
         }
+        
       }else {
         sb_conveyor.setConveyor(0);
       }
@@ -139,7 +141,7 @@ public class RobotContainer {
       () -> (pilot.getLeftY())  * (pilot.getRightBumper() ? 0.2 : 0.8),
       () ->  pilot.getLeftX()   * (pilot.getRightBumper() ? 0.2 : 0.8),
       () -> (pilot.getRightX())  * (pilot.getRightBumper() ? 0.2 : 0.8),
-      () ->  !pilot.getAButton(),
+      () ->  true,
       () ->  pilot.getBButton()));
 //*/
 
@@ -240,14 +242,14 @@ public class RobotContainer {
 
     //return null;
     //return new TestAuto(sb_swerve, sb_shooter, sb_conveyor, sb_intake);
-    //return new AutoFirstCenter(sb_swerve, sb_shooter, sb_conveyor, sb_intake, sb_ll);
+    //return new AutoFirstCenter(sb_swerve, sb_shooter, sb_conveyor, sb_intake);
     //return new AutoSecondCenter(sb_swerve, sb_shooter, sb_conveyor, sb_intake);
     //return new ShooterCmd(sb_shooter, sb_conveyor);
     //return new AutoSecondCenterRed(sb_swerve, sb_shooter, sb_conveyor, sb_intake);
     //return new AutoThirdCenterRed(sb_swerve, sb_shooter, sb_conveyor, sb_intake);
 
     //OBS: Lados em relação a visão do piloto na quadra
-    //return new AutoBlueRightAndRedLeft(sb_swerve, sb_shooter, sb_conveyor, sb_intake);
+    //return new AutoBlueRightAndRedLeft(sb_swerve, sb_shooter, sb_conveyor, sb_intake);//
     return new AutoBlueLeftAndRedRight(sb_swerve, sb_shooter, sb_conveyor, sb_intake);
 
   }

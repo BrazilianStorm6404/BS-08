@@ -25,6 +25,6 @@ public class Amp extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("limit", limit.get());
+    //SmartDashboard.putBoolean("limit", limit.get());
   }
 }

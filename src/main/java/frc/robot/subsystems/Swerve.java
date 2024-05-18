@@ -34,7 +34,7 @@ public class Swerve extends SubsystemBase {
   SwerveDriveOdometry odometer = new SwerveDriveOdometry(SwerveConstants.kinematics, getRotation2d(), modulePositions);
 
   //Offset da posição inicial do robô
-  double gyroOffset = 0;
+  double gyroOffset = 50;
 
   //Pausa para estabilização do sistema e resetar o giroscópio adequadamente
   public Swerve() {
@@ -59,7 +59,7 @@ public class Swerve extends SubsystemBase {
 
   //Obtém a posição do giroscópio em relação a quadra
   public double getHeading(){
-    return Math.IEEEremainder((navx.getAngle() + gyroOffset) % 360, 360.0); 
+    return Math.IEEEremainder((navx.getAngle() + gyroOffset) % 360, 360.0);
   }
 
   //Obtém a angulação da quadra 
@@ -100,15 +100,15 @@ public class Swerve extends SubsystemBase {
     //Atualiza odometria
     odometer.update(getRotation2d(), modulePositions);
 
-    SmartDashboard.putNumber("frontLeft", frontLeft.getTurningPosition()/360.);
-    SmartDashboard.putNumber("frontRight", frontRight.getTurningPosition()/360.);
-    SmartDashboard.putNumber("backLeft", backLeft.getTurningPosition()/360.);
-    SmartDashboard.putNumber("backRight", backRight.getTurningPosition()/360.);
+    //SmartDashboard.putNumber("frontLeft", frontLeft.getTurningPosition()/360.);
+    //SmartDashboard.putNumber("frontRight", frontRight.getTurningPosition()/360.);
+    //SmartDashboard.putNumber("backLeft", backLeft.getTurningPosition()/360.);
+    //SmartDashboard.putNumber("backRight", backRight.getTurningPosition()/360.);
 
-    SmartDashboard.putNumber("Heading", -getHeading());
-    SmartDashboard.putNumber("Gyro", -navx.getAngle());
+    //SmartDashboard.putNumber("Heading", -getHeading());
+    //SmartDashboard.putNumber("Gyro", -navx.getAngle());
 
-    SmartDashboard.putNumber("frontLeft drive", frontLeft.getDrivePosition());
+    //SmartDashboard.putNumber("frontLeft drive", frontLeft.getDrivePosition());
 
 
   }
